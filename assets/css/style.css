@@ -45,6 +45,10 @@ header a {
     padding: 30px 40px;
 }
 
+.highscore {
+    text-align: center;
+}
+
 .card-header::after {
     content: " ";
     display: block;
@@ -55,6 +59,25 @@ header a {
 
 .card-body {
     min-height: 100px;
+}
+
+.btn {
+    border: none;
+    background-color: rgb(39, 8, 175);
+    border-radius: 25px;
+    box-shadow: 2px 2px 5px 3px black;
+    color: hsl(0, 0%, 100%);
+    display: inline-block;
+    font-size: 22px;
+    line-height: 22px;
+    margin: 16px 16px 16px 20px;
+    padding: 10px 34px;
+    text-align: center;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #6397d1;
 }
 
 .card-footer {
@@ -80,9 +103,15 @@ header a {
 }
 
 @media (max-width: 690px) {
-
+    .btn {
+        font-size: 1rem;
+        margin: 16px 0px 0px 0px;
+        padding: 10px 15px;
+    }
 }
 
 @media (max-width: 500px) {
-
+    .btn {
+        font-size: 0.8rem;
+    }
 }
