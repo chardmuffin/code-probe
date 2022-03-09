@@ -26,14 +26,19 @@ body {
 header {
     padding: 20px;
     padding-top: 0px;
-    color: hsl(206, 17%, 28%);
+    color: black;
 }
 
 header span {
-    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    background: rgb(166, 255, 166);
+    box-shadow: 2px 2px 5px 2px slategray;
+    font-weight: bold;
 }
 
 header span:hover {
+    background: rgb(220, 255, 220);
     cursor: pointer;
 }
 
@@ -42,7 +47,7 @@ header span:hover {
     border-radius: 5px;
     border-width: 1px;
     box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px 0px;
-    color: hsl(206, 17%, 28%);
+    color: black;
     font-size: 18px;
     margin: 0 auto;
     max-width: 800px;
