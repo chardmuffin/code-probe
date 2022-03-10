@@ -89,7 +89,7 @@ header span:hover {
 }
 
 .card-body {
-    min-height: 300px;
+    min-height: 250px;
 }
 
 .card-body ul {
@@ -97,7 +97,7 @@ header span:hover {
 }
 
 .card-body ul li {
-    padding: 10px 35px 10px 0;
+    padding: 5px 35px 5px 0;
 }
 
 .btn {
@@ -121,8 +121,19 @@ button:hover {
 
 .card-footer {
     text-align: center;
-    color: hsl(205, 69%, 81%);
     min-height: 80px;
+}
+
+#right-wrong {
+    font-size: 50px;
+    font-style: italic;
+    margin: 0;
+    opacity: 1;
+}
+
+#right-wrong.fade {
+    opacity: 0;
+    transition: opacity 2s;
 }
 
 .card-footer::before {
