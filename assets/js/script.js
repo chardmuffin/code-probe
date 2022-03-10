@@ -146,7 +146,7 @@ var nextQuestionHandler = function(event) {
             }, 1000);
     }
 
-    //if completed all the questions
+    // stop here if completed all the questions
     if (currQuestion >= questionArray.length) {
         return;
     }
