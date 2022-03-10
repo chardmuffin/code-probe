@@ -96,8 +96,36 @@ header span:hover {
     list-style-type: none;
 }
 
-.card-body ul li {
-    padding: 5px 35px 5px 0;
+.score-card {
+    font-weight: bold;
+    padding: 10px 100px;
+    line-height: 1.8;
+}
+
+.score-card ul {
+    margin: 20px 70px;
+    border: 1px solid black;
+    padding: 3px 10px;
+    box-shadow: 2px 2px 5px 2px slategray;
+}
+
+.score-card ul li {
+    padding: 0;
+    line-height: 2;
+}
+
+.score-card div {
+    text-align: center;
+}
+
+#input_id {
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.bottom-border {
+    border-bottom: 3px solid black;
 }
 
 .btn {

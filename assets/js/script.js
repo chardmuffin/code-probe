@@ -45,6 +45,11 @@ var finalScore = 0;
 var currQuestion = -1;
 var correctAnswerId;
 
+var headerEl = document.querySelector("header");
+var cardHeaderEl = document.querySelector(".card-header");
+var cardBodyEl = document.querySelector(".card-body");
+var cardFooterEl = document.querySelector(".card-footer");
+
 /* ============================================= functions =========================================== */
 
 //displays a welcome message for the user
@@ -59,17 +64,17 @@ var welcomeMessage = function() {
     finalScore = 0;
 
     //add highscores link and initialized timer to header
-    document.querySelector("header").innerHTML = "<span>View Highscores</span><div class='float-right' id='timer'>Time: " + timeLeft + "</div>";
+    headerEl.innerHTML = "<span>View Highscores</span><div class='float-right' id='timer'>Time: " + timeLeft + "</div>";
     document.querySelector("header span").addEventListener("click", displayHighScores)
 
-    document.querySelector(".card-header").innerHTML = "<h1>Welcome to Code Probe!</h1>";
-    document.querySelector(".card-body").innerHTML =
+    cardHeaderEl.innerHTML = "<h1>Welcome to Code Probe!</h1>";
+    cardBodyEl.innerHTML =
     "<p>You will have " + timeLeft + " seconds to answer as many multiple choice coding questions as you can. Each incorrect answer will subtract " + penalty + " seconds from the clock.</br></br>Good luck!</p>"
     
     // add start button to footer
     startButtonEl.className = "btn";
     startButtonEl.textContent = "START";
-    document.querySelector(".card-footer").appendChild(startButtonEl);
+    cardFooterEl.appendChild(startButtonEl);
 
     startButtonEl.addEventListener("click", startGame);
 };
@@ -82,8 +87,8 @@ var startGame = function() {
     //remove welcome message and hide high scores button, init prompt message and footer message
     clearContent();
     document.querySelector("header span").remove();
-    document.querySelector(".card-header").innerHTML = "<h2 id='prompt'>If you are seeing this, there was an error</h2>";
-    document.querySelector(".card-footer").innerHTML = "<h3 id='right-wrong'></h3>";
+    cardHeaderEl.innerHTML = "<h2 id='prompt'>If you are seeing this, there was an error</h2>";
+    cardFooterEl.innerHTML = "<h3 id='right-wrong'></h3>";
 
     //loop 4 times to generate 4 buttons with unique ids and listElements 
     for (i = 0; i < 4; i++) {
@@ -96,7 +101,7 @@ var startGame = function() {
         unorderedListEl.appendChild(liEl);
     };
 
-    document.querySelector(".card-body").appendChild(unorderedListEl);
+    cardBodyEl.appendChild(unorderedListEl);
 
     //shuffle order of the questions then call the first question
     shuffle(questionArray);
@@ -167,18 +172,46 @@ var nextQuestionHandler = function(event) {
         }
     }
 
-    console.log((currQuestion + 1) + ". correct answer: " + document.getElementById(correctAnswerId).textContent);
+    //console.log((currQuestion + 1) + ". correct answer: " + document.getElementById(correctAnswerId).textContent);
 };
 
-//TODO: request initials, display score
+//TODO: request initials, display and save score
 var displayScore = function() {
 
-    console.log("Final Score: " + finalScore);
-    //TODO: display score
-    // request input of initials
-    document.querySelector(".card-header").innerHTML = "";
-    document.querySelector(".card-body").innerHTML = "";
+    cardHeaderEl.innerHTML = "<h1>New High Score!</h1>";
+    cardBodyEl.innerHTML = "<div class='score-card'></div>";
+
+    document.querySelector(".score-card").innerHTML =
+    "Questions Answered Correctly: <span class='float-right'>" + finalScore + "</span></br>" +
+    "Time Remaining: <span class='float-right'>" + timeLeft + "</span>" +
+
+    "<ul><li>Accuracy Bonus:<span class='float-right'>" + finalScore + " x 5 = " + (finalScore * 5) + "</span></li>" +
+    "<li class='bottom-border'>Time Bonus:<span class='float-right'>" + timeLeft + " / 10 = " + Math.floor(timeLeft / 10) + "</span></li>" +
+    "</br><li>Final Score:<span class='float-right'>" + (Math.floor(timeLeft / 10) + finalScore * 5) + "</span></li></ul></br>";
+
+    finalScore = (Math.floor(timeLeft / 10) + finalScore * 5);
+
+    //TODO: ask user to enter their name
+    var inputFormEl = document.createElement("div");
+    inputFormEl.innerHTML =
+    "<label for='input_id'>Initials: </label>" +
+    "<input type='text' id='input_id' value='' size = '3' maxlength='3' autocomplete='off'>" +
+    "<input type='button' class='btn' value='Submit' onclick='formHandler()'/>";
+
+    document.querySelector(".score-card").appendChild(inputFormEl);
 };
+
+var formHandler = function() {
+
+    var name = document.getElementById("input_id").value;
+    if (name === "") {
+        name = "---";
+    }
+
+    console.log(name + ": " + finalScore);
+
+    displayHighScores();
+}
 
 //TODO: Display the high scores
 var displayHighScores = function() {
@@ -187,9 +220,9 @@ var displayHighScores = function() {
     var clearButtonEl = document.createElement("button");
 
     clearContent();
-    document.querySelector("header").innerHTML = ""; // remove the timer and highscores link
+    headerEl.innerHTML = ""; // remove the timer and highscores link
 
-    document.querySelector(".card-header").innerHTML = "<h1>Highscores</h1>";
+    cardHeaderEl.innerHTML = "<h1>Highscores</h1>";
 
     // TODO: get high scores from local storage and display
     // if local storage has no high scores, display "No high scores yet"
@@ -199,7 +232,7 @@ var displayHighScores = function() {
     clearButtonEl.textContent = "Reset Highscores";
     backButtonEl.textContent = "Go Back";
 
-    document.querySelector(".card-footer").append(backButtonEl, clearButtonEl);
+    cardFooterEl.append(backButtonEl, clearButtonEl);
 
     backButtonEl.addEventListener("click", welcomeMessage);
     clearButtonEl.addEventListener("click", resetHighscores);
@@ -212,9 +245,9 @@ var resetHighscores = function() {
 
 //class is called to remove old content before displaying new content
 var clearContent = function() {
-    document.querySelector(".card-header").innerHTML = "";
-    document.querySelector(".card-body").innerHTML = "";
-    document.querySelector(".card-footer").innerHTML = "";
+    cardHeaderEl.innerHTML = "";
+    cardBodyEl.innerHTML = "";
+    cardFooterEl.innerHTML = "";
 };
 
 /* Randomize array in-place using Durstenfeld shuffle algorithm
