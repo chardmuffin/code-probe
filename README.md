@@ -10,6 +10,8 @@ The user is prompted to enter their initials and their score is saved locally to
 
 ## Usage
 
+Access the deployed site at [https://chardmuffin.github.io/code-probe/](https://chardmuffin.github.io/code-probe/)
+
 Click the "START" button to begin the test or click "View Highscores" to see the list of local high scores. When the quiz starts, read the prompt and select the correct response from four possible answers. When all questions are answered or the time runs out, the user will see the calculation for their final score. The user can type 3 characters and click the "Submit" button to save their score. The user will see their score in the list of code-probe high scores.
 
 ![screen1](./assets/images/screen1.png)
