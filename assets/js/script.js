@@ -1,12 +1,15 @@
 /*========================= How to add/change questions in this quiz ===================================
 
-Edit the array of objects below so that each object contains a String "prompt" and Array "answers"...
+Edit the array of objects "questionArray" in welcomeMessage() so that each object contains a String "prompt" and Array "answers"...
 where "answers" contains 4 Strings and the first index is the correct answer. e.g:
 
 obj = {
-    "prompt" : "Enter the prompt as String here",
+    "prompt" : "Enter the String prompt here",
     "answers" :
-        ["Correct", "Wrong", "Wrong Again", "Still Wrong"]
+        ["Correct",
+        "Wrong",
+        "Wrong Again",
+        "Still Wrong"]
 }
 
 The correct answer in the above is targeted with "obj.answers[0]"
@@ -14,36 +17,13 @@ The correct answer in the above is targeted with "obj.answers[0]"
 The order of answers are randomized during the quiz.
 */
 
-var questionArray = [{
-    "prompt" : "What is the correct answer to this question?",
-    "answers" :
-        ["This is the correct answer.",
-        "This is a wrong answer.",
-        "This answer is also wrong.",
-        "This is not the correct answer."]
-},
-{
-    "prompt" : "What is the right choice?",
-    "answers" :
-        ["This one.",
-        "Not this one.",
-        "Don't click here.",
-        "No."]
-},
-{
-    "prompt" : "Bet you don't know the correct answer to this. What is it?",
-    "answers" :
-        ["I know it! It is this one!",
-        "I don't know it.",
-        "Please, don't make me pick this one.",
-        "This choice is incorrect."]
-}]
-
+var questionArray;
 var timeLeft = 75;
 var penalty = 10;
 var finalScore = 0;
 var currQuestion = -1;
 var correctAnswerId;
+var scoresArray = JSON.parse(localStorage.getItem("scoresArray"));
 
 var headerEl = document.querySelector("header");
 var cardHeaderEl = document.querySelector(".card-header");
@@ -62,6 +42,38 @@ var welcomeMessage = function() {
     timeLeft = 75;
     currQuestion = -1;
     finalScore = 0;
+    questionArray = [{
+        "prompt" : "What is the correct answer to this question?",
+        "answers" :
+            ["This is the correct answer.",
+            "This is a wrong answer.",
+            "This answer is also wrong.",
+            "This is not the correct answer."]
+    },
+    {
+        "prompt" : "What is the right choice?",
+        "answers" :
+            ["This one.",
+            "Not this one.",
+            "Don't click here.",
+            "No."]
+    },
+    {
+        "prompt" : "Bet you don't know the correct answer to this. What is it?",
+        "answers" :
+            ["I know it! It is this one!",
+            "I don't know it.",
+            "Please, don't make me pick this one.",
+            "This choice is incorrect."]
+    },
+    {
+        "prompt" : "What is the answer?",
+        "answers" :
+            ["This is the answer.",
+            "Not this one.",
+            "Nope.",
+            "Not this one!"]
+    }]
 
     //add highscores link and initialized timer to header
     headerEl.innerHTML = "<span>View Highscores</span><div class='float-right' id='timer'>Time: " + timeLeft + "</div>";
@@ -113,7 +125,6 @@ var startGame = function() {
         document.getElementById("timer").innerHTML = "Time: " + timeLeft;
 
         if (timeLeft <= 0 || currQuestion >= questionArray.length) {
-            console.log("ran out of time or answered all the questions")
             clearInterval(counter);
             displayScore();
         }   
@@ -182,33 +193,55 @@ var displayScore = function() {
     cardBodyEl.innerHTML = "<div class='score-card'></div>";
 
     document.querySelector(".score-card").innerHTML =
-    "Questions Answered Correctly: <span class='float-right'>" + finalScore + "</span></br>" +
-    "Time Remaining: <span class='float-right'>" + timeLeft + "</span>" +
-
-    "<ul><li>Accuracy Bonus:<span class='float-right'>" + finalScore + " x 5 = " + (finalScore * 5) + "</span></li>" +
-    "<li class='bottom-border'>Time Bonus:<span class='float-right'>" + timeLeft + " / 10 = " + Math.floor(timeLeft / 10) + "</span></li>" +
-    "</br><li>Final Score:<span class='float-right'>" + (Math.floor(timeLeft / 10) + finalScore * 5) + "</span></li></ul></br>";
+    "Questions Answered Correctly: <span>" + finalScore + "</span></br>" +
+    "Time Remaining: <span>" + timeLeft + "</span>" +
+    "<ul class='list'><li>Accuracy Bonus:<span>" + finalScore + " x 5 = " + (finalScore * 5) + "</span></li>" +
+    "<li class='bottom-border'>Time Bonus:<span>" + timeLeft + " / 10 = " + Math.floor(timeLeft / 10) + "</span></li>" +
+    "</br><li>Final Score:<span>" + (Math.floor(timeLeft / 10) + finalScore * 5) + "</span></li></ul></br>";
 
     finalScore = (Math.floor(timeLeft / 10) + finalScore * 5);
 
     //TODO: ask user to enter their name
     var inputFormEl = document.createElement("div");
+    inputFormEl.className = "center";
     inputFormEl.innerHTML =
     "<label for='input_id'>Initials: </label>" +
     "<input type='text' id='input_id' value='' size = '3' maxlength='3' autocomplete='off'>" +
-    "<input type='button' class='btn' value='Submit' onclick='formHandler()'/>";
+    "<input type='button' class='btn' value='Submit' onclick='saveScore()'/>";
 
     document.querySelector(".score-card").appendChild(inputFormEl);
 };
 
-var formHandler = function() {
+var saveScore = function() {
 
-    var name = document.getElementById("input_id").value;
+    var insertIndex;
+
+    var name = document.getElementById("input_id").value.toUpperCase();
     if (name === "") {
         name = "---";
     }
 
-    console.log(name + ": " + finalScore);
+    var scoreObj = {
+        "name" : name,
+        "score" : finalScore
+    }
+
+    if (!scoresArray) {
+        scoresArray = [scoreObj];
+        localStorage.setItem("scoresArray", JSON.stringify(scoresArray));
+        return displayHighScores();
+    }
+    
+    //get new score index
+    for (var i = 0; i < scoresArray.length; i++) {
+        if (scoresArray[i].score < finalScore) {
+            insertIndex = i + 1;
+        }
+    }
+
+    scoresArray.splice(insertIndex, 0, scoreObj);
+
+    localStorage.setItem("scoresArray", JSON.stringify(scoresArray));
 
     displayHighScores();
 }
@@ -224,9 +257,6 @@ var displayHighScores = function() {
 
     cardHeaderEl.innerHTML = "<h1>Highscores</h1>";
 
-    // TODO: get high scores from local storage and display
-    // if local storage has no high scores, display "No high scores yet"
-    
     backButtonEl.className = "btn";
     clearButtonEl.className = "btn";
     clearButtonEl.textContent = "Reset Highscores";
@@ -236,11 +266,28 @@ var displayHighScores = function() {
 
     backButtonEl.addEventListener("click", welcomeMessage);
     clearButtonEl.addEventListener("click", resetHighscores);
+
+    //console.log(scoresArray)
+    
+    if (!scoresArray) {
+        cardBodyEl.innerHTML = "<p class='center'></br></br>No highscores yet!</p>";
+        return;
+    }
+    else {
+        cardBodyEl.innerHTML = "<ol class='list ordered'></ol>";
+        var scoresOrderedListEl = document.querySelector(".card-body ol");
+    }
+
+    for (var i = scoresArray.length-1; i >= 0; i--) {
+        scoresOrderedListEl.innerHTML += "<li>" + scoresArray[i].name + "<span>" + scoresArray[i].score + "</span></li>";
+    }
 };
 
 //TODO
 var resetHighscores = function() {
-    console.log("reseting highscores")
+    scoresArray = null;
+    localStorage.clear();
+    displayHighScores();
 };
 
 //class is called to remove old content before displaying new content

@@ -71,7 +71,7 @@ header span:hover {
 
 }
 
-.highscore {
+.center {
     text-align: center;
 }
 
@@ -102,20 +102,29 @@ header span:hover {
     line-height: 1.8;
 }
 
-.score-card ul {
+.list {
     margin: 20px 70px;
     border: 1px solid black;
     padding: 3px 10px;
     box-shadow: 2px 2px 5px 2px slategray;
 }
 
-.score-card ul li {
+.ordered {
+    font-weight: bold;
+    padding: 3px 50px;
+}
+
+.list li {
     padding: 0;
     line-height: 2;
 }
 
-.score-card div {
-    text-align: center;
+.ordered li {
+    padding-left: 30px;
+}
+
+.list span {
+    float: right;
 }
 
 #input_id {
