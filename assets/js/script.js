@@ -75,7 +75,6 @@ var welcomeMessage = function() {
             "Not this one!"]
     }]
 
-    //add highscores link and initialized timer to header
     headerEl.innerHTML = "<span>View Highscores</span><div class='float-right' id='timer'>Time: " + timeLeft + "</div>";
     document.querySelector("header span").addEventListener("click", displayHighScores)
 
@@ -83,7 +82,6 @@ var welcomeMessage = function() {
     cardBodyEl.innerHTML =
     "<p>You will have " + timeLeft + " seconds to answer as many multiple choice coding questions as you can. Each incorrect answer will subtract " + penalty + " seconds from the clock.</br></br>Good luck!</p>"
     
-    // add start button to footer
     startButtonEl.className = "btn";
     startButtonEl.textContent = "START";
     cardFooterEl.appendChild(startButtonEl);
@@ -119,7 +117,6 @@ var startGame = function() {
     shuffle(questionArray);
     nextQuestionHandler();
 
-    // running this code every 1000ms
     var counter = setInterval(function() {
         timeLeft--;
         document.getElementById("timer").innerHTML = "Time: " + timeLeft;
@@ -128,7 +125,7 @@ var startGame = function() {
             clearInterval(counter);
             displayScore();
         }   
-    }, 1000);
+    }, 1000); // running this function every 1000ms
 };
 
 //This function is called whenever an answer is clicked
@@ -167,7 +164,6 @@ var nextQuestionHandler = function(event) {
         return;
     }
 
-    //display prompt
     document.getElementById('prompt').textContent = (currQuestion + 1) + ". " + questionArray[currQuestion].prompt;
 
     //store the correct answer, then shuffle the answers
@@ -183,6 +179,7 @@ var nextQuestionHandler = function(event) {
         }
     }
 
+    //uncomment the next line to cheat
     //console.log((currQuestion + 1) + ". correct answer: " + document.getElementById(correctAnswerId).textContent);
 };
 
@@ -201,7 +198,6 @@ var displayScore = function() {
 
     finalScore = (Math.floor(timeLeft / 10) + finalScore * 5);
 
-    //TODO: ask user to enter their name
     var inputFormEl = document.createElement("div");
     inputFormEl.className = "center";
     inputFormEl.innerHTML =
@@ -212,6 +208,7 @@ var displayScore = function() {
     document.querySelector(".score-card").appendChild(inputFormEl);
 };
 
+//saves new score to localstorage and places score into scoresArray (ordered from lowest to highest score)
 var saveScore = function() {
 
     var insertIndex;
@@ -239,6 +236,7 @@ var saveScore = function() {
         }
     }
 
+    //insert new score in order
     scoresArray.splice(insertIndex, 0, scoreObj);
 
     localStorage.setItem("scoresArray", JSON.stringify(scoresArray));
@@ -246,7 +244,7 @@ var saveScore = function() {
     displayHighScores();
 }
 
-//TODO: Display the high scores
+// displays the highscores. If there was a tie, the first player to have reached that score is listed first, 2nd player next, etc.
 var displayHighScores = function() {
 
     var backButtonEl = document.createElement("button");
@@ -266,8 +264,6 @@ var displayHighScores = function() {
 
     backButtonEl.addEventListener("click", welcomeMessage);
     clearButtonEl.addEventListener("click", resetHighscores);
-
-    //console.log(scoresArray)
     
     if (!scoresArray) {
         cardBodyEl.innerHTML = "<p class='center'></br></br>No highscores yet!</p>";
@@ -283,14 +279,16 @@ var displayHighScores = function() {
     }
 };
 
-//TODO
+//prompt user are you sure? then resets scores from localStorage and scoresArray
 var resetHighscores = function() {
-    scoresArray = null;
-    localStorage.clear();
-    displayHighScores();
+    if (window.confirm("Are you sure you want to clear all high scores?\n\nThis cannot be undone.")) {
+        scoresArray = null;
+        localStorage.clear();
+        displayHighScores();
+    }
 };
 
-//class is called to remove old content before displaying new content
+//class can be used to remove old content before displaying new content
 var clearContent = function() {
     cardHeaderEl.innerHTML = "";
     cardBodyEl.innerHTML = "";
@@ -303,7 +301,7 @@ https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm
 */
 var shuffle = function(array) {
     for (var i = array.length - 1; i > 0; i--) { // go backwards thru the array
-        var j = Math.floor(Math.random() * (i + 1)); //get a random int between 0 and i, inclusive
+        var j = Math.floor(Math.random() * (i + 1)); //j = a random int between 0 and i, inclusive
         var temp = array[i];
         array[i] = array[j];
         array[j] = temp;              // switch array[i] with array[j]
