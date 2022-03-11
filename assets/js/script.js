@@ -1,27 +1,12 @@
-/*========================= How to add/change questions in this quiz ===================================
+/* Richard Huffman
 
-Edit the array of objects "questionArray" in welcomeMessage() so that each object contains a String "prompt" and Array "answers"...
-where "answers" contains 4 Strings and the first index is the correct answer. e.g:
-
-obj = {
-    "prompt" : "Enter the String prompt here",
-    "answers" :
-        ["Correct",
-        "Wrong",
-        "Wrong Again",
-        "Still Wrong"]
-}
-
-The correct answer in the above is targeted with "obj.answers[0]"
-
-The order of answers are randomized during the quiz.
-*/
+Please see the README.md*/
 
 var questionArray;
-var timeLeft = 75;
-var penalty = 10;
-var finalScore = 0;
-var currQuestion = -1;
+var timeLeft;
+var timePenalty = 10;
+var finalScore;
+var currQuestion;
 var correctAnswerId;
 var scoresArray = JSON.parse(localStorage.getItem("scoresArray"));
 
@@ -43,36 +28,76 @@ var welcomeMessage = function() {
     currQuestion = -1;
     finalScore = 0;
     questionArray = [{
-        "prompt" : "What is the correct answer to this question?",
+        "prompt" : "What is the correct JavaScript syntax to change the content of an HTML <p> element with id='demo' ?",
         "answers" :
-            ["This is the correct answer.",
-            "This is a wrong answer.",
-            "This answer is also wrong.",
-            "This is not the correct answer."]
+            ["document.getElementById('demo').innerHTML = 'Hello World!';",
+            "#demo.innerHTML = 'Hello World!';",
+            "document.getElementByName('p').innerHTML = 'Hello World!';",
+            "document.querySelector('demo').innerHTML = 'Hello World!';"]
     },
     {
-        "prompt" : "What is the right choice?",
+        "prompt" : "What is the correct syntax for referring to an external script called 'script.js'?",
         "answers" :
-            ["This one.",
-            "Not this one.",
-            "Don't click here.",
-            "No."]
+            ["<script src='script.js'>",
+            "<script>script.js</script>",
+            "<script name='script.js'>",
+            "<script href='script.js'>"]
     },
     {
-        "prompt" : "Bet you don't know the correct answer to this. What is it?",
+        "prompt" : "How can you create a function in javascript?",
         "answers" :
-            ["I know it! It is this one!",
-            "I don't know it.",
-            "Please, don't make me pick this one.",
-            "This choice is incorrect."]
+            ["function foobar()",
+            "var function() = foobar",
+            "function() foobar",
+            "var foobar() = function"]
     },
     {
-        "prompt" : "What is the answer?",
+        "prompt" : "How do you write an 'if' statement in javascript?",
         "answers" :
-            ["This is the answer.",
-            "Not this one.",
-            "Nope.",
-            "Not this one!"]
+            ["if (x == 5)",
+            "if x == 5",
+            "if (x = 5)",
+            "if x = 5"]
+    },
+    {
+        "prompt" : "How do you write a comment in javascript?",
+        "answers" :
+            ["// This is a comment",
+            "# This is a comment",
+            "<!-- This is a comment -->",
+            "-- This is a comment"]
+    },
+    {
+        "prompt" : "How do you access the 3rd element in an array in javascript?",
+        "answers" :
+            ["myArray[2]",
+            "myArray[3]",
+            "myArray.getElementByIndex(3)",
+            "myArray.getElementByIndex(2)"]
+    },
+    {
+        "prompt" : "How do you write a for loop in javascript?",
+        "answers" :
+            ["for (var i = 0; i < myArray.length; i++) {...}",
+            "for item in myArray {...}",
+            "for (i = 0; i < myArray.length; i++;) {...}",
+            "for item of myArray {...}"]
+    },
+    {
+        "prompt" : "How do you declare an array in javascript?",
+        "answers" :
+            ["var myArray = ['a', 'b', 'c', 'd']",
+            "var myArray = 'a', 'b', 'c', 'd'",
+            "var myArray = {'a', 'b', 'c', 'd'}",
+            "var myArray = {1: 'a', 2: 'b', 3:  'c', 4: 'd'}"]
+    },
+    {
+        "prompt" : "How can you store data to localStorage in javascript?",
+        "answers" :
+            ["localStorage.setItem('myItem', value)",
+            "localStorage.setItem('myItem')",
+            "localStorage.setItem(value)",
+            "localStorage.setItem(myItem)"]
     }]
 
     headerEl.innerHTML = "<span>View Highscores</span><div class='float-right' id='timer'>Time: " + timeLeft + "</div>";
@@ -80,7 +105,7 @@ var welcomeMessage = function() {
 
     cardHeaderEl.innerHTML = "<h1>Welcome to Code Probe!</h1>";
     cardBodyEl.innerHTML =
-    "<p>You will have " + timeLeft + " seconds to answer as many multiple choice coding questions as you can. Each incorrect answer will subtract " + penalty + " seconds from the clock.</br></br>Good luck!</p>"
+    "<p>You will have " + timeLeft + " seconds to answer as many multiple choice coding questions as you can. Each incorrect answer will subtract " + timePenalty + " seconds from the clock.</br></br>Good luck!</p>"
     
     startButtonEl.className = "btn";
     startButtonEl.textContent = "START";
@@ -183,7 +208,7 @@ var nextQuestionHandler = function(event) {
     //console.log((currQuestion + 1) + ". correct answer: " + document.getElementById(correctAnswerId).textContent);
 };
 
-//TODO: request initials, display and save score
+//displays final score calculation and requests user to input initials
 var displayScore = function() {
 
     cardHeaderEl.innerHTML = "<h1>New High Score!</h1>";

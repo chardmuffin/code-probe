@@ -94,12 +94,17 @@ header span:hover {
 
 .card-body ul {
     list-style-type: none;
+    padding-left: 0;
 }
 
 .score-card {
     font-weight: bold;
     padding: 10px 100px;
     line-height: 1.8;
+}
+
+.score-card ul {
+    padding: 5px 30px;
 }
 
 .list {
@@ -144,7 +149,7 @@ header span:hover {
     box-shadow: 2px 2px 5px 2px slategray;
     color: hsl(0, 0%, 100%);
     display: inline-block;
-    font-size: 22px;
+    font-size: 18px;
     line-height: 22px;
     margin: 16px 16px 16px 20px;
     padding: 10px 34px;
@@ -196,5 +201,30 @@ button:hover {
 @media (max-width: 500px) {
     .btn {
         font-size: 0.8rem;
+    }
+
+    .wrapper {
+        padding: 5px;
+        margin: 5px;
+    }
+
+    .card-body p {
+        padding: 10px;
+        margin: 10px;
+    }
+
+    .card {
+        padding: 5px;
+        margin: 0;
+    }
+
+    .score-card {
+        padding: 5px;
+        margin: 5px;
+    }
+
+    .list {
+        padding: 0;
+        margin: 0;
     }
 }
